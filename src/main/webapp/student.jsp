@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page  import="org.bson.Document"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,11 +14,15 @@
     />
 </head>
 <body>
+<%
+Document doc=(Document) request.getSession().getAttribute("user");
+%>
 <div class="row justify-content-between w-75 mt-5" style="margin:0px auto;" >
 <div>
 <div class="row align-items-center px-4 justify-content-between" style="width:620px;height:160px;left:236.32px;box-sizing: border-box;top: 55.25px;background:#d1f2eb;border-radius: 14px;">
 <div>
-<h2 style="font-family: 'Baloo Bhai'">Hello Rabi Islam</h2>
+<h2 style="font-family: 'Baloo Bhai'">Hello <%= doc.get("username") %></h2>
+
 <p>Computer Science and Engineering</p>
 </div>
 <img src="static/img/banner_image_1.svg" class="img-fluid" alt="Sample image" width="180" height="180">

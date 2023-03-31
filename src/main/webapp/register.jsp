@@ -23,7 +23,7 @@
       </div>
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
         <h1 class="navbar-brand mb-4 text-center ml-5">Course<span class="text-primary">Management</span></h1>
-        <form action="register.jsp" method="get">
+        <form action="register" method="post" enctype="multipart/form-data">
           <!-- Email input -->
           <div class="form-outline mb-4">
             <label class="form-label" for="form3Example3">Username</label>
@@ -45,7 +45,7 @@
 		</select>
           </div>
           
-
+		${alert }
 
           <div class="text-center text-lg-start mt-4 pt-2">
             <button type="submit" class="btn btn-primary btn-lg"
@@ -56,15 +56,6 @@
           </div>
 
         </form>
-        <%
-        	String username=request.getParameter("username");
-        	String password=request.getParameter("password");
-        	String type=request.getParameter("res-type");
-        	
-        	
-        	
-        	
-        %>
       </div>
     </div>
     </div>

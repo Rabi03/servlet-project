@@ -25,5 +25,12 @@
             <artifactId>mongodb-driver-sync</artifactId>
             <version>4.8.0</version>
         </dependency>
+    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>jstl</artifactId>
+        <version>1.2</version>
+    </dependency>
+
+
     </dependencies>
 </project>

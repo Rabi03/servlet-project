@@ -1,5 +1,9 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
+<%@ page import="org.bson.Document" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +33,13 @@ font-weight: 400;
 font-size: 24px;
 line-height: 38px;">Courses</p>
 
-<!--Courses-->
+<%
+Document doc=(Document) request.getSession().getAttribute("admin");
+%>
+
+
+<c:forEach items='<%=doc.get("courses")%>' var="c">
+          <!--Courses-->
 <div class="row align-items-center justify-content-between px-3 mb-3" style="width: 620px;
 height: 80px;
 background:  #eaf2f8;
@@ -39,8 +49,8 @@ border-radius: 14px;">
 <p style="font-family: 'Baloo Bhai';
 font-style: normal;
 font-weight: 400;
-font-size: 16px;margin-bottom:0px;">Introduction to machine Learning</p>
-<p>assign to Shahid Sir</p>
+font-size: 16px;margin-bottom:0px;">${c.get("title")}</p>
+<p>${c.get("teacher")}</p>
 </div>
 <p style="font-family: 'Baloo Bhai';
 font-style: normal;
@@ -51,30 +61,10 @@ font-size: 13px;margin-bottom:0px;">11 May,2023</p>
 </div>
 
 <!--End-->
+</c:forEach>
 
 
-<!--Courses-->
-<div class="row align-items-center justify-content-between px-3 mb-3" style="width: 620px;
-height: 80px;
-background:  #eaf2f8;
-border-radius: 14px;">
-<img src="https://img.icons8.com/external-flat-gradient-andi-nur-abdillah/64/null/external-course-online-learning-flat-gradient-flat-gradient-andi-nur-abdillah.png"/>
-<div class="mt-2">
-<p style="font-family: 'Baloo Bhai';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;margin-bottom:0px;">Introduction to machine Learning</p>
-<p>assign to Shahid Sir</p>
-</div>
-<p style="font-family: 'Baloo Bhai';
-font-style: normal;
-font-weight: 400;
-font-size: 13px;margin-bottom:0px;">11 May,2023</p>
-<img src="https://img.icons8.com/plumpy/24/null/edit-row.png"/>
-<img src="https://img.icons8.com/plumpy/24/null/delete--v1.png"/>
-</div>
 
-<!--End-->
 
 
 
@@ -96,7 +86,7 @@ font-size: 13px;margin-bottom:0px;">11 May,2023</p>
 <h2 style="font-family: 'Baloo Bhai';font-style: normal;
 font-weight: 800;
 font-size: 64px;
-color: #000000;">10</h2>
+color: #000000;"><%=doc.get("totalTeacher") %></h2>
 <p style="font-style: normal;
 font-weight: 400;
 font-size: 16px;
@@ -107,12 +97,12 @@ margin-top:15px;
 <h2 style="font-family: 'Baloo Bhai';font-style: normal;
 font-weight: 800;
 font-size: 64px;
-color: #000000;">20</h2>
+color: #000000;"><%=doc.get("totalCourses") %></h2>
 <p style="font-style: normal;
 font-weight: 400;
 font-size: 16px;
 margin-top:15px;
-">Total Students</p>
+">Total Courses</p>
 </div>
 </div>
 
@@ -138,22 +128,35 @@ font-size: 24px;">Add a New Course.</p>
         </button>
       </div>
       <div class="modal-body">
+      <form action="admin" method="post" enctype="multipart/form-data">
       	<div class="form-outline mb-4">
             <label class="form-label" for="form3Example3">Course Title</label>
             <input type="text" id="form3Example3" class="form-control form-control-sm"
               placeholder="Enter an course name" name="title" />
           </div>
-         <div>
-          <label class="form-label" for="form3Example4">Select teacher</label>
-          <select class="form-control" aria-label="Default select example" name="res-type">
-          <option value="0">Select a teacher</option>
-		  <option value='1'>Mr. Sohan Rahman</option>
-		  <option value="2">Dr. Zhalok Rahman</option>
+          <div>
+          <label class="form-label" for="form3Example4">Select Credits</label>
+          <select class="form-control" aria-label="Default select example" name="credit">
+          <option value='1'>1</option>
+          <option value='1.5'>1.5</option>
+          <option value='2'>2</option>
+          <option value='3'>3</option>
+          
 		</select>
           </div>
-      </div>
+         <div>
+          <label class="form-label" for="form3Example4">Select teacher</label>
+          <select class="form-control" aria-label="Default select example" name="teacher">
+          <option value="0">Select a teacher</option>
+          <c:forEach items='<%=doc.get("teachers")%>' var="d">
+          <option value='${d.get("username")}'>${d.get("username")}</option>
+          </c:forEach>
+		</select>
+          </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+      </form>
       </div>
     </div>
   </div>
