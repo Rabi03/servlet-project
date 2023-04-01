@@ -15,8 +15,8 @@
 <body>
 <section>
   <div class="container">
-  <div class="page-banner home-banner">
-    <div class="row flex-wrap-reverse justify-content-center align-items-center h-100 mt-5">
+  <div class="page-banner home-banner h-100 py-4 mt-5">
+    <div class="row flex-wrap-reverse justify-content-center align-items-center">
       <div class="col-md-9 col-lg-6 col-xl-5">
         <img src="static/img/banner_image_1.svg"
           class="img-fluid" alt="Sample image">
@@ -24,6 +24,11 @@
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
         <h1 class="navbar-brand mb-4 text-center ml-5">Course<span class="text-primary">Management</span></h1>
         <form action="register" method="post" enctype="multipart/form-data">
+        <div class="form-outline mb-4">
+            <label class="form-label" for="form3Example3">Full Name</label>
+            <input type="text" id="form3Example3" class="form-control form-control-sm"
+              placeholder="Enter an unique username" name="fname" />
+          </div>
           <!-- Email input -->
           <div class="form-outline mb-4">
             <label class="form-label" for="form3Example3">Username</label>
@@ -38,6 +43,15 @@
               placeholder="Enter password" name="password" />
           </div>
           <div>
+          <div>
+          <label class="form-label" for="form3Example4">Department</label>
+          <select class="form-control" aria-label="Default select example" name="dept">
+		  <option value='Computer Science and Technology'>Computer Science and Technology</option>
+		  <option value="Mechanical Engineering">Mechanical Engineering</option>
+		  <option value="Civil Engineering">Civil Engineering</option>
+		  <option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
+		</select>
+          </div>
           <label class="form-label" for="form3Example4">Register As</label>
           <select class="form-control" aria-label="Default select example" name="res-type">
 		  <option value='1'>Student</option>
@@ -50,8 +64,8 @@
           <div class="text-center text-lg-start mt-4 pt-2">
             <button type="submit" class="btn btn-primary btn-lg"
               style="padding-left: 2.5rem; padding-right: 2.5rem;">Register</button>
-            <p class="small fw-bold mt-2 pt-1 mb-0">Already have an account? <a href="login.jsp"
-                class="link-danger">Login</a> or <a href="index.jsp"
+            <p class="small fw-bold mt-2 pt-1 mb-0">Already have an account? <a href="login"
+                class="link-danger">Login</a> or <a href="home"
                 class="link-danger">Home</a></p>
           </div>
 

@@ -45,8 +45,8 @@
             <p class="text-lg text-grey mb-5">It's a virtual learning environments that are categorized based on pedagogical tools such as content creation, communication, administration and assessment</p>
             <div class="row align-items-center">
             <br/>
-            <a href="login.jsp" class="btn btn-primary text-center mr-3">Signin</a>
-            <a href="register.jsp" class="btn btn-primary text-center">Signup</a>
+            <a href="login" class="btn btn-primary text-center mr-3">Signin</a>
+            <a href="register" class="btn btn-primary text-center">Signup</a>
             </div>
             
           </div>

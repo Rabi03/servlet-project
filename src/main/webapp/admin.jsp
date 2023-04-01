@@ -35,11 +35,16 @@ line-height: 38px;">Courses</p>
 
 <%
 Document doc=(Document) request.getSession().getAttribute("admin");
+String edit=(String) doc.get("edit");
+String editTitle=(String) doc.get("edit-title");
+String editCredit=(String) doc.get("edit-credit");
+String editTeacher=(String) doc.get("edit-teacher");
+String editId=(String) doc.get("editId");
 %>
 
 
 <c:forEach items='<%=doc.get("courses")%>' var="c">
-          <!--Courses-->
+<!--Courses-->
 <div class="row align-items-center justify-content-between px-3 mb-3" style="width: 620px;
 height: 80px;
 background:  #eaf2f8;
@@ -56,8 +61,8 @@ font-size: 16px;margin-bottom:0px;">${c.get("title")}</p>
 font-style: normal;
 font-weight: 400;
 font-size: 13px;margin-bottom:0px;">11 May,2023</p>
-<img src="https://img.icons8.com/plumpy/24/null/edit-row.png"/>
-<img src="https://img.icons8.com/plumpy/24/null/delete--v1.png"/>
+<a href='admin?edit=true&edit-title=${c.get("title")}&editId=${c.get("_id")}' class="btn btn-light p-1" style="background:  #eaf2f8;"><img src="https://img.icons8.com/plumpy/24/null/edit-row.png"/></a>
+<a href='admin?remove-course-id=${c.get("_id")}' class="btn btn-light p-1" style="background:  #eaf2f8;"><img src="https://img.icons8.com/plumpy/24/null/delete--v1.png"/></a>
 </div>
 
 <!--End-->
@@ -116,9 +121,64 @@ font-style: normal;
 font-weight: 400;
 font-size: 24px;">Add a New Course.</p>
 <p>Add course and assign a teacher.</p>
+
+<%  
+if (edit == "1") 
+{ 
+%>
+
+                
+<div class="modal" id="editModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Course</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="admin?edit=true&editId=<%=doc.get("editId") %>" method="post" enctype="multipart/form-data">
+      	<div class="form-outline mb-4">
+            <label class="form-label" for="form3Example3">Course Title</label>
+            <input type="text" id="form3Example3" class="form-control form-control-sm"
+              placeholder="Enter an course name" value='<%=doc.get("edit-title") %>' name="title" />
+          </div>
+          <div>
+          <label class="form-label" for="form3Example4">Select Credits</label>
+          <select class="form-control" aria-label="Default select example" name="credit">
+          <option value='0'>Select Credit</option>
+          <option value='1'>1</option>
+          <option value='1.5' >1.5</option>
+          <option value='2'>2</option>
+          <option value='3'>3</option>
+          
+		</select>
+          </div>
+         <div>
+          <label class="form-label" for="form3Example4">Select teacher</label>
+          <select class="form-control" aria-label="Default select example" name="teacher" value='<%=doc.get("edit-teacher") %>'>
+          <option value="0">Select a teacher</option>
+          <c:forEach items='<%=doc.get("teachers")%>' var="d">
+          <option value='${d.get("username")}'>${d.get("username")}</option>
+          </c:forEach>
+		</select>
+          </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Edit</button>
+      </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+<% } 
+%>
+
+
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">New Course</button>
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -173,5 +233,8 @@ font-size: 24px;">Add a New Course.</p>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+$('#editModal').modal('show')
+</script>
 </body>
 </html>

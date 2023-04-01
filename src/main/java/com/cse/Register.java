@@ -24,7 +24,7 @@ public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	MongoConnection client=new MongoConnection();
 	MongoDatabase db=client.getDatabase();
-	MongoCollection<Document> collection = db.getCollection("collection1");
+	MongoCollection<Document> collection = db.getCollection("user");
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -37,8 +37,7 @@ public class Register extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		request.getRequestDispatcher("register.jsp").forward(request, response);
 	}
 
 	/**
@@ -47,8 +46,10 @@ public class Register extends HttpServlet {
 	@SuppressWarnings("null")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession se=request.getSession();
+		String fname=request.getParameter("fname");
 		String username=request.getParameter("username");
     	String password=request.getParameter("password");
+    	String dept=request.getParameter("dept");
     	String type=request.getParameter("res-type");
     	
     	Document doc = collection.find(eq("username", username)).first();
@@ -66,6 +67,8 @@ public class Register extends HttpServlet {
         	Document sampleDoc = new Document();
         	sampleDoc.append("username",username);
         	sampleDoc.append("password",password);
+        	sampleDoc.append("fname",fname);
+        	sampleDoc.append("dept",dept);
         	sampleDoc.append("type",type);
         	UUID uuid=UUID.randomUUID();
         	sampleDoc.append("_id", uuid.toString());
@@ -74,13 +77,13 @@ public class Register extends HttpServlet {
         	se.setAttribute("user", sampleDoc);
         	System.out.println("Type: "+sampleDoc.get("_id"));
     		if(type.equals("0")) {
-    			response.sendRedirect("admin.jsp");
+    			response.sendRedirect("admin");
     		}
     		else if(type.equals("1")) {
-    			response.sendRedirect("student.jsp");
+    			response.sendRedirect("student");
         		}
     		else {
-    			response.sendRedirect("teacher.jsp");
+    			response.sendRedirect("teacher");
     		}
         	
 //        	request.getRequestDispatcher("student.jsp").forward(request, response);

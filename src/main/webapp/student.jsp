@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page  import="org.bson.Document"%>
 <!DOCTYPE html>
 <html>
@@ -16,14 +17,16 @@
 <body>
 <%
 Document doc=(Document) request.getSession().getAttribute("user");
+Document data=(Document) request.getSession().getAttribute("student");
 %>
 <div class="row justify-content-between w-75 mt-5" style="margin:0px auto;" >
 <div>
 <div class="row align-items-center px-4 justify-content-between" style="width:620px;height:160px;left:236.32px;box-sizing: border-box;top: 55.25px;background:#d1f2eb;border-radius: 14px;">
 <div>
-<h2 style="font-family: 'Baloo Bhai'">Hello <%= doc.get("username") %></h2>
+<h2 style="font-family: 'Baloo Bhai'">Hello <%= doc.get("fname") %></h2>
 
-<p>Computer Science and Engineering</p>
+<p><%= doc.get("dept") %></p>
+
 </div>
 <img src="static/img/banner_image_1.svg" class="img-fluid" alt="Sample image" width="180" height="180">
 </div>
@@ -34,6 +37,7 @@ font-weight: 400;
 font-size: 24px;
 line-height: 38px;">Courses</p>
 
+<c:forEach items='<%=data.get("usercourses")%>' var="c">
 <!--Courses-->
 <div class="row align-items-center justify-content-between px-3 mb-3" style="width: 620px;
 height: 80px;
@@ -44,13 +48,13 @@ border-radius: 14px;">
 <p style="font-family: 'Baloo Bhai';
 font-style: normal;
 font-weight: 400;
-font-size: 16px;margin-bottom:0px;">Introduction to machine Learning</p>
-<p>by Shahid Sir</p>
+font-size: 16px;margin-bottom:0px;">${c.get("title")}</p>
+<p>by ${c.get("teacher")}</p>
 </div>
 <p style="font-family: 'Baloo Bhai';
 font-style: normal;
 font-weight: 400;
-font-size: 13px;">3 Credits</p>
+font-size: 13px;">${c.get("credit")} Credits</p>
 <div class="align-items-center justify-content-center mt-2">
 <p style="font-family: 'Baloo Bhai';
 font-style: normal;
@@ -64,68 +68,8 @@ font-size: 16px;">2023</p>
 </div>
 
 <!--End-->
+</c:forEach>
 
-<!--Courses-->
-<div class="row align-items-center justify-content-between px-3 mb-3" style="width: 620px;
-height: 80px;
-background:  #eafaf1;
-border-radius: 14px;">
-<img src="https://img.icons8.com/external-flat-gradient-andi-nur-abdillah/64/null/external-course-online-learning-flat-gradient-flat-gradient-andi-nur-abdillah.png"/>
-<div class="mt-2">
-<p style="font-family: 'Baloo Bhai';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;margin-bottom:0px;">Introduction to machine Learning</p>
-<p>by Shahid Sir</p>
-</div>
-<p style="font-family: 'Baloo Bhai';
-font-style: normal;
-font-weight: 400;
-font-size: 13px;">3 Credits</p>
-<div class="align-items-center justify-content-center mt-2">
-<p style="font-family: 'Baloo Bhai';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;margin-bottom:0px;">11 May</p>
-<p style="font-family: 'Baloo Bhai';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;">2023</p>
-</div>
-</div>
-
-<!--End-->
-
-<!--Courses-->
-<div class="row align-items-center justify-content-between px-3 mb-3" style="width: 620px;
-height: 80px;
-background:  #eafaf1;
-border-radius: 14px;">
-<img src="https://img.icons8.com/external-flat-gradient-andi-nur-abdillah/64/null/external-course-online-learning-flat-gradient-flat-gradient-andi-nur-abdillah.png"/>
-<div class="mt-2">
-<p style="font-family: 'Baloo Bhai';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;margin-bottom:0px;">Introduction to machine Learning</p>
-<p>by Shahid Sir</p>
-</div>
-<p style="font-family: 'Baloo Bhai';
-font-style: normal;
-font-weight: 400;
-font-size: 13px;">3 Credits</p>
-<div class="align-items-center justify-content-center mt-2">
-<p style="font-family: 'Baloo Bhai';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;margin-bottom:0px;">11 May</p>
-<p style="font-family: 'Baloo Bhai';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;">2023</p>
-</div>
-</div>
-
-<!--End-->
 
 
 
@@ -142,23 +86,12 @@ font-size: 16px;">2023</p>
 
 
 <div class="align-items-center justify-content-center">
-<div class="row align-items-center justify-content-between">
+<div class="row align-items-center justify-content-center">
 <div class="row align-items-center justify-content-center" style="width:200px;height:97px;background:  #eafaf1;border-radius: 14px;margin-right:50px">
 <h2 style="font-family: 'Baloo Bhai';font-style: normal;
 font-weight: 800;
 font-size: 64px;
-color: #000000;">11</h2>
-<p style="font-style: normal;
-font-weight: 400;
-font-size: 16px;
-margin-top:15px;
-">Total Courses</p>
-</div>
-<div class="row align-items-center justify-content-center" style="width:200px;height:97px;background:  #eafaf1;border-radius: 14px;margin-right:50px">
-<h2 style="font-family: 'Baloo Bhai';font-style: normal;
-font-weight: 800;
-font-size: 64px;
-color: #000000;">11</h2>
+color: #000000"><%=data.get("totalUserCourses")!=null?data.get("totalUserCourses"):0 %></h2>
 <p style="font-style: normal;
 font-weight: 400;
 font-size: 16px;
@@ -177,7 +110,10 @@ font-style: normal;
 font-weight: 400;
 font-size: 24px;">Register for New Course.</p>
 <p>Find your courses and teachers.</p>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Register</button>
+<div class="row px-3">
+<button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#exampleModal">Register</button>
+<a href="student?logout=true"><button type="button" class="btn btn-primary">Logout</button></a>
+</div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -188,19 +124,22 @@ font-size: 24px;">Register for New Course.</p>
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <form action="student" method="post" enctype="multipart/form-data">
       <div class="modal-body">
          <div>
           <label class="form-label" for="form3Example4">Select course</label>
-          <select class="form-control" aria-label="Default select example" name="res-type">
+          <select class="form-control" aria-label="Default select example" name="course">
           <option value="0">Select a course</option>
-		  <option value='1'>Introduction to Machine Learning by Sohan Rahman</option>
-		  <option value="2">Database System by Zhalok Rahman</option>
+          <c:forEach items='<%=data.get("courses")%>' var="c">
+			<option value='${c.get("_id")}'>${c.get("title")} by ${c.get("teacher")}</option>
+			</c:forEach>
 		</select>
           </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary">Save</button>
       </div>
+      </form>
     </div>
   </div>
 </div>

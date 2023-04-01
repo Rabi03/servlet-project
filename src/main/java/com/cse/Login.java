@@ -3,6 +3,9 @@ package com.cse;
 import static com.mongodb.client.model.Filters.eq;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
 import org.bson.Document;
 import com.mongodb.client.*;
 
@@ -23,7 +27,7 @@ public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	MongoConnection client=new MongoConnection();
 	MongoDatabase db=client.getDatabase();
-	MongoCollection<Document> collection = db.getCollection("collection1");
+	MongoCollection<Document> collection = db.getCollection("user");
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -37,8 +41,8 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		request.getRequestDispatcher("login.jsp").forward(request, response);
 	}
 
 	/**
@@ -49,7 +53,9 @@ public class Login extends HttpServlet {
 		String username=request.getParameter("username");
     	String password=request.getParameter("password");
     	
+    	
     	Document doc = collection.find(eq("username", username)).first();
+    	
     	
     	
     	if (doc == null) {
@@ -69,11 +75,11 @@ public class Login extends HttpServlet {
         			response.sendRedirect("admin");
         		}
         		else if(t.equals("1")) {
-        			response.sendRedirect("student.jsp");
+        			response.sendRedirect("student");
             		
             		}
         		else {
-        			response.sendRedirect("teacher.jsp");
+        			response.sendRedirect("teacher");
         			
         		}
         	}else {
@@ -93,5 +99,14 @@ public class Login extends HttpServlet {
             
         }
 	}
+	
+	private <Document> List<Document> convert(FindIterable<Document> findIterable) {
+        List<Document> documents = new ArrayList<>();
+        MongoCursor<Document> cursor = findIterable.cursor();
+        while (cursor.hasNext())
+            documents.add(cursor.next());
+
+        return documents;
+    }
 	}
 
