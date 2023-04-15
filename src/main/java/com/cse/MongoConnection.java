@@ -8,7 +8,7 @@ import com.mongodb.client.MongoDatabase;
 public class MongoConnection{
 	public MongoDatabase db;
 	public MongoConnection() {
-		MongoClient client=MongoClients.create("mongodb+srv://admin-rabi:test123@cluster0.vqy4c.mongodb.net");
+		MongoClient client=MongoClients.create("<your mongodb connection url>");
 		System.out.println("server connection successfully done");
 		this.db = client.getDatabase("webTech");
 		
