@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Signin| Course Management System</title>
 <link rel="stylesheet" href="static/css/bootstrap.css">
   <link rel="stylesheet" href="static/css/theme.css">
 </head>

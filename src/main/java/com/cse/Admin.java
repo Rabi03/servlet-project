@@ -3,6 +3,7 @@ package com.cse;
 import static com.mongodb.client.model.Filters.eq;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -36,6 +37,7 @@ public class Admin extends HttpServlet {
 	MongoDatabase db=client.getDatabase();
 	MongoCollection<Document> users = db.getCollection("user");
 	MongoCollection<Document> courses = db.getCollection("courses");
+	MongoCollection<Document> join = db.getCollection("join");
 	
        
     /**
@@ -53,6 +55,19 @@ public class Admin extends HttpServlet {
 		
 		
 		HttpSession se=request.getSession();
+		if(se.getAttribute("user")==null) {
+			response.sendRedirect("login");
+			return;
+		}
+		
+		if(request.getParameter("logout")!=null) {
+			se.removeAttribute("user");
+			se.removeAttribute("student");
+			se.removeAttribute("admin");
+			
+			response.sendRedirect("login");
+			return;
+		}
 		FindIterable<Document> findTeachers= users.find(eq("type","2" ));
 		List<Document> teachers=this.convert(findTeachers);
 		Document data=new Document();
@@ -62,7 +77,8 @@ public class Admin extends HttpServlet {
 			Bson query = eq("_id", request.getParameter("remove-course-id").toString());
 			 try {
 	            DeleteResult result = courses.deleteOne(query);
-	            System.out.println("Deleted document count: " + result.getDeletedCount());
+	            DeleteResult result1 = join.deleteMany(eq("course", request.getParameter("remove-course-id").toString()));
+	            System.out.println("Deleted document count: " + result.getDeletedCount()+"Join: "+result1.getDeletedCount());
 	            FindIterable<Document> findCourses= courses.find();
 	    		List<Document> co=this.convert(findCourses);
 	    		data.append("courses", co);
@@ -85,6 +101,7 @@ public class Admin extends HttpServlet {
 		if(request.getParameter("edit") != null) {
 			data.append("edit", "1");
 			data.append("edit-title", request.getParameter("edit-title"));
+			data.append("edit-title", request.getParameter("edit-code"));
 			data.append("editId", request.getParameter("editId"));
 					
 		}
@@ -106,10 +123,14 @@ public class Admin extends HttpServlet {
 		String title=request.getParameter("title");
     	String credit=request.getParameter("credit");
     	String teacher=request.getParameter("teacher");
+    	String code=request.getParameter("code");
+    	String semester=request.getParameter("semester");
     	
     	Document sampleDoc = new Document();
     	sampleDoc.append("title",title);
     	sampleDoc.append("credit",credit);
+    	sampleDoc.append("code",code);
+    	sampleDoc.append("semester",semester);
     	sampleDoc.append("teacher",teacher);
     	UUID uuid=UUID.randomUUID();
     	sampleDoc.append("_id", uuid.toString());
@@ -121,11 +142,15 @@ public class Admin extends HttpServlet {
     		Bson query = eq("_id", request.getParameter("editId").toString());
     		String edittitle=request.getParameter("title");
         	String editcredit=request.getParameter("credit");
+        	String editcode=request.getParameter("code");
+        	String editsemester=request.getParameter("semester");
         	String editteacher=request.getParameter("teacher");
     		
         	Bson updates = Updates.combine(
                     Updates.set("title", edittitle),
                     Updates.set("credit", editcredit),
+                    Updates.set("code", editcode),
+                    Updates.set("semester", editsemester),
                     Updates.set("teacher", editteacher));
             UpdateOptions options = new UpdateOptions().upsert(true);
             try {
@@ -150,17 +175,14 @@ public class Admin extends HttpServlet {
     	}
     	else {
     	courses.insertOne(sampleDoc);
-    	Bson queryteacher = eq("username", teacher);
-		Bson teacherupdates = Updates.addToSet("courses",uuid.toString());
-		
-		UpdateOptions teacheroptions = new UpdateOptions().upsert(true);
-		try {
-            UpdateResult result = users.updateOne(queryteacher, teacherupdates, teacheroptions);
-            System.out.println("Modified document count: " + result.getModifiedCount());
-        } catch (MongoException me) {
-            System.err.println("Unable to update due to an error: " + me);
-        }
-    	}
+    	UUID uuid1=UUID.randomUUID();
+    	Document joinData=new Document();
+    	joinData.append("_id", uuid1.toString());
+    	joinData.append("course", uuid.toString());
+    	joinData.append("user", teacher);
+    	joinData.append("date", new Date().toLocaleString());
+    	
+    	join.insertOne(joinData);
     	
     	HttpSession se=request.getSession();
 		FindIterable<Document> findResult= courses.find();
@@ -171,6 +193,7 @@ public class Admin extends HttpServlet {
 		
 		se.setAttribute("admin", data);
 		request.getRequestDispatcher("admin.jsp").forward(request, response);
+    	}
     	
     	
     	
@@ -186,5 +209,7 @@ public class Admin extends HttpServlet {
 
         return documents;
     }
+	
+	
 
 }

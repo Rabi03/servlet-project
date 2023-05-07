@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Student| Course Management system</title>
 <link rel="stylesheet" href="static/css/bootstrap.css">
   <link rel="stylesheet" href="static/css/theme.css">
   <link
@@ -37,7 +37,7 @@ font-weight: 400;
 font-size: 24px;
 line-height: 38px;">Courses</p>
 
-<c:forEach items='<%=data.get("usercourses")%>' var="c">
+<c:forEach items='<%=data.get("courses")%>' var="c">
 <!--Courses-->
 <div class="row align-items-center justify-content-between px-3 mb-3" style="width: 620px;
 height: 80px;
@@ -48,23 +48,26 @@ border-radius: 14px;">
 <p style="font-family: 'Baloo Bhai';
 font-style: normal;
 font-weight: 400;
-font-size: 16px;margin-bottom:0px;">${c.get("title")}</p>
-<p>by ${c.get("teacher")}</p>
+font-size: 16px;margin-bottom:0px;">${c.get("courseData").get("title")}</p>
+<p>by ${c.get("courseData").get("teacher")}</p>
 </div>
 <p style="font-family: 'Baloo Bhai';
 font-style: normal;
 font-weight: 400;
-font-size: 13px;">${c.get("credit")} Credits</p>
-<div class="align-items-center justify-content-center mt-2">
+font-size: 13px;margin-top:15px">${c.get("courseData").get("credit")} Credits</p>
 <p style="font-family: 'Baloo Bhai';
 font-style: normal;
 font-weight: 400;
-font-size: 16px;margin-bottom:0px;">11 May</p>
+font-size: 14px;margin-bottom:0px;">${c.get("courseData").get("code")}</p>
 <p style="font-family: 'Baloo Bhai';
 font-style: normal;
 font-weight: 400;
-font-size: 16px;">2023</p>
-</div>
+font-size: 14px;margin-top:15px;">${c.get("courseData").get("semester")}</p>
+<p style="font-family: 'Baloo Bhai';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;margin-bottom:0px;">${c.get("date")}</p>
+<a href='student?remove-course-id=${c.get("id")}' class="btn btn-light p-1" style="background:  #eaf2f8;"><img src="https://img.icons8.com/plumpy/24/null/delete--v1.png"/></a>
 </div>
 
 <!--End-->
@@ -91,7 +94,7 @@ font-size: 16px;">2023</p>
 <h2 style="font-family: 'Baloo Bhai';font-style: normal;
 font-weight: 800;
 font-size: 64px;
-color: #000000"><%=data.get("totalUserCourses")!=null?data.get("totalUserCourses"):0 %></h2>
+color: #000000"><%=data.get("totalCourses")!=null?data.get("totalCourses"):0 %></h2>
 <p style="font-style: normal;
 font-weight: 400;
 font-size: 16px;
@@ -130,7 +133,7 @@ font-size: 24px;">Register for New Course.</p>
           <label class="form-label" for="form3Example4">Select course</label>
           <select class="form-control" aria-label="Default select example" name="course">
           <option value="0">Select a course</option>
-          <c:forEach items='<%=data.get("courses")%>' var="c">
+          <c:forEach items='<%=data.get("totalcourses")%>' var="c">
 			<option value='${c.get("_id")}'>${c.get("title")} by ${c.get("teacher")}</option>
 			</c:forEach>
 		</select>

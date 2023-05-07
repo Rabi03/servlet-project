@@ -4,6 +4,7 @@ import static com.mongodb.client.model.Filters.eq;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -20,6 +21,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoIterable;
 
 /**
  * Servlet implementation class Teacher
@@ -32,6 +34,7 @@ public class Teacher extends HttpServlet {
 	MongoDatabase db=client.getDatabase();
 	MongoCollection<Document> courses = db.getCollection("courses");
 	MongoCollection<Document> users = db.getCollection("user");
+	MongoCollection<Document> join = db.getCollection("join");
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -46,6 +49,11 @@ public class Teacher extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession se=request.getSession();
+		if(se.getAttribute("user")==null) {
+			response.sendRedirect("login");
+			return;
+		}
+		
 		Document data=new Document();
 		if(request.getParameter("logout")!=null) {
 			se.removeAttribute("user");
@@ -57,13 +65,15 @@ public class Teacher extends HttpServlet {
 		else if(request.getParameter("course_id")!=null) {
 			
 			List<Document> courseStudents=new ArrayList<Document>();
-			Document course= (Document) courses.find(eq("_id",request.getParameter("course_id").toString())).first();
-			List<String> students=(List<String>) course.get("students");
-    		for(String s:students) {
+			FindIterable<Document> userdata= join.find(eq("course",request.getParameter("course_id").toString()));
+			List<Document> students=this.get_user_and_convert(userdata);
+    		for(Document s:students) {
     			
-    			Document st = users.find(eq("_id", s.toString())).first();
-    			courseStudents.add(st);
+    			
+    			courseStudents.add((Document) s.get("userData"));
     		}
+    		
+    		System.out.print(courseStudents);
     		
     		data.append("value", courseStudents);
     		se.setAttribute("students", data);
@@ -71,24 +81,19 @@ public class Teacher extends HttpServlet {
 		}
 		else {
 		
-		List<Document> userCourses=new ArrayList<Document>();
+		Document new_courses=new Document();
+		
 		Document doc=(Document) se.getAttribute("user");
-		Document user=users.find(eq("username", doc.get("username"))).first();
+		FindIterable<Document> AllCourses=join.find(eq("user", doc.get("username")));
+		
+		List<Document> courses=this.get_and_convert(AllCourses);
 		
 		
-		if(user.get("courses")!=null) {
-    		int total=0;
-    		List<String> defcourses=(List<String>) user.get("courses");
-    		for(String c:defcourses) {
-    			total+=1;
-    			Document co = courses.find(eq("_id", c.toString())).first();
-    			userCourses.add(co);
-    		}
-    		
-    		data.append("usercourses",userCourses);
-    		data.append("totalUserCourses", total);
-    		
-    	}
+		
+		
+		
+		data.append("usercourses",courses);
+		data.append("totalUserCourses",  courses.size());
 		
 		
 		
@@ -96,7 +101,9 @@ public class Teacher extends HttpServlet {
 		
 		request.getRequestDispatcher("teacher.jsp").forward(request, response);
 		}
-	}
+		}
+	
+
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -111,6 +118,42 @@ public class Teacher extends HttpServlet {
         MongoCursor<Document> cursor = findIterable.cursor();
         while (cursor.hasNext())
             documents.add(cursor.next());
+
+        return documents;
+    }
+	
+	private List<Document> get_and_convert(FindIterable<Document> findIterable) {
+        List<Document> documents = new ArrayList<>();
+        MongoCursor<Document> cursor = findIterable.cursor();
+        while (cursor.hasNext()) {
+        	Document data=new Document();
+        	Document joinData=(Document) cursor.next();
+        	
+        	Document course=(Document) courses.find(eq("_id",joinData.get("course"))).first();
+        	
+        	data.append("date", joinData.get("date").toString().substring(0, 11));
+        	 data.append("courseData", course);
+            documents.add(data);
+        }
+
+        return documents;
+    }
+	
+	private List<Document> get_user_and_convert(FindIterable<Document> findIterable) {
+        List<Document> documents = new ArrayList<>();
+        MongoCursor<Document> cursor = findIterable.cursor();
+        while (cursor.hasNext()) {
+        	Document data=new Document();
+        	Document joinData=(Document) cursor.next();
+        	
+        	Document user=(Document) users.find(eq("username",joinData.get("user"))).first();
+        	
+        	if(user.get("type").equals("1")) {
+        	
+        	 data.append("userData", user);
+            documents.add(data);
+        	}
+        }
 
         return documents;
     }

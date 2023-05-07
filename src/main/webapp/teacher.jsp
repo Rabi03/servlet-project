@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Teacher| Course Management System</title>
 <link rel="stylesheet" href="static/css/bootstrap.css">
   <link rel="stylesheet" href="static/css/theme.css">
   <link
@@ -47,21 +47,15 @@ border-radius: 14px;cursor: pointer;">
 <p style="font-family: 'Baloo Bhai';
 font-style: normal;
 font-weight: 400;
-font-size: 16px;margin-bottom:0px;"><a href='teacher?course_id=${c.get("_id")}' style="color:black">${c.get("title")}</a></p>
+font-size: 16px;margin-bottom:0px;"><a href='teacher?course_id=${c.get("courseData").get("_id")}' style="color:black">${c.get("courseData").get("title")}</a></p>
 <p style="font-family: 'Baloo Bhai';
 font-style: normal;
 font-weight: 400;
-font-size: 13px;">${c.get("credit")} Credits</p>
-<div class="align-items-center justify-content-center mt-2">
+font-size: 13px;margin-top:15px">${c.get("courseData").get("credit")} Credits</p>
 <p style="font-family: 'Baloo Bhai';
 font-style: normal;
 font-weight: 400;
-font-size: 16px;margin-bottom:0px;">11 May</p>
-<p style="font-family: 'Baloo Bhai';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;">2023</p>
-</div>
+font-size: 16px;margin-bottom:0px;">${c.get("date")}</p>
 </div>
 
 <!--End-->
